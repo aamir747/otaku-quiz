@@ -9,11 +9,18 @@ function App() {
   //----------DIFFICULTY----------//
   const [diff, setDiff] = useState('medium');
   function handleDiffChange(event) { setDiff(event.target.value) };
+
+  //----------FETCHING_DATA----------//
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    getData()
+  }, [diff]);
   const url = `https://opentdb.com/api.php?amount=10&category=31&difficulty=${diff}&type=multiple`;
   async function getData() {
-    let data = await fetch(url);
-    let json = data.json();
-    return json;
+    let fetchedData = await fetch(url);
+    let json = await fetchedData.json();
+    let arr = await json.results;
+    setData(arr);
   }
   // getData().then(results => console.log(results));
 
@@ -26,9 +33,9 @@ function App() {
   return (
     <div className='flex justify-center items-center w-screen h-screen bg-white'>
       <div className='w-[540px] h-[540px] bg-white drop-shadow-[0_0_20px_rgba(0,0,0,0.25)] flex flex-col justify-center items-center relative overflow-hidden'>
-        {page==='Landing' && <Background />}
-        {page==='Landing' && <LandingPage diff={diff} handleDiffChange={handleDiffChange} handlePageChange={handlePageChange} />}
-        {page==='Quiz' && <QuizPage getData={getData}/>}
+        {page === 'Landing' && <Background />}
+        {page === 'Landing' && <LandingPage diff={diff} handleDiffChange={handleDiffChange} handlePageChange={handlePageChange} />}
+        {page === 'Quiz' && <QuizPage data={data} />}
       </div>
     </div>
   );
@@ -73,23 +80,23 @@ function Background() {
 }
 
 function QuizPage(props) {
-  const data = props.getData();
-  console.log(data);
+  // console.log(props.data[0]);
   // const data = props.getData().then(results => console.log(results));
   return (
     <div className='w-full h-full bg-white flex flex-col overflow-y-auto'>
-      <MCQ />
-      <MCQ />
-      <MCQ />
-      <MCQ />
+      <MCQ question={props.data[0].question} answers={[props.data[0].correct_answer, ...props.data[0].incorrect_answers]} />
+      <MCQ question={props.data[1].question} answers={[props.data[1].correct_answer, ...props.data[1].incorrect_answers]} />
+      <MCQ question={props.data[2].question} answers={[props.data[2].correct_answer, ...props.data[2].incorrect_answers]} />
+      <MCQ question={props.data[3].question} answers={[props.data[3].correct_answer, ...props.data[3].incorrect_answers]} />
     </div>
   )
 }
 
-function MCQ() {
+function MCQ(props) {
+  console.log(props.answers);
   return (
     <div className='w-full h-fit bg-white px-16 py-6 flex flex-col gap-3 border-b'>
-      <p className="font-['Architects_Daughter'] text-lg">Who is Luffy's grandfather?</p>
+      <p className="font-['Architects_Daughter'] text-lg">{props.question}</p>
       <div className='flex gap-x-3 flex-wrap'>
         <button className='font-["Architects_Daughter"] bg-white w-fit px-2 py-0.5 border border-black whitespace-nowrap'>Dragon</button>
         <button className='font-["Architects_Daughter"] bg-white w-fit px-2 py-0.5 border border-black whitespace-nowrap'>Kaido</button>
