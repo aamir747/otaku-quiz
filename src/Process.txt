@@ -1,0 +1,5 @@
+Steps:
+
+✅ Make Components
+⬜ Fetch data from the API
+⬜ Build logic
