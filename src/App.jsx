@@ -62,6 +62,62 @@ function LandingPage(props) {
   );
 }
 
+function QuizPage(props) {
+  //----------SHUFFLING_ANSWERS----------//
+  function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+
+      // Generate random number
+      var j = Math.floor(Math.random() * (i + 1));
+
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    console.log(array)
+    return array;
+  }
+
+  const quizPageData = props.data.map((obj) => {
+    const arr = [obj.correct_answer, ...obj.incorrect_answers];
+    const shuffledArr = shuffleArray(arr);
+    return <MCQ question={obj.question} answers={shuffledArr} />
+  })
+
+  //----------USER_ANSWERS----------//
+  const [userAnswers, setUserAnswers] = useState([]);
+  return (
+    <div className='w-full h-full bg-white flex flex-col overflow-y-auto'>
+      {quizPageData}
+      {/* <MCQ question={props.data[0].question} answers={[props.data[0].correct_answer, ...props.data[0].incorrect_answers]} /> */}
+      {/* <MCQ question={props.data[1].question} answers={[props.data[1].correct_answer, ...props.data[1].incorrect_answers]} /> */}
+      {/* <MCQ question={props.data[2].question} answers={[props.data[2].correct_answer, ...props.data[2].incorrect_answers]} /> */}
+      {/* <MCQ question={props.data[3].question} answers={[props.data[3].correct_answer, ...props.data[3].incorrect_answers]} /> */}
+    </div>
+  )
+}
+
+function MCQ(props) {
+  function decodeEntity(inputStr) {
+    var textarea = document.createElement("textarea");
+    textarea.innerHTML = inputStr;
+    return textarea.value;
+  }
+
+  // console.log(props.answers);
+  return (
+    <div className='w-full h-fit bg-white px-16 py-6 flex flex-col gap-3 border-b'>
+      <p className="font-[serif] text-lg">{decodeEntity(props.question)}</p>
+      <div className='flex gap-3 flex-wrap'>
+        <button className='font-[serif] bg-white w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 transition duration-300 hover:drop-shadow-sm'>{decodeEntity(props.answers[0])}</button>
+        <button className='font-[serif] bg-white w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 transition duration-300 hover:drop-shadow-sm'>{decodeEntity(props.answers[1])}</button>
+        <button className='font-[serif] bg-white w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 transition duration-300 hover:drop-shadow-sm'>{decodeEntity(props.answers[2])}</button>
+        <button className='font-[serif] bg-white w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 transition duration-300 hover:drop-shadow-sm'>{decodeEntity(props.answers[3])}</button>
+      </div>
+    </div>
+  )
+}
+
 function Background() {
   return (
     <div className='w-100% h-100% flex flex-col justify-center items-center'>
@@ -75,34 +131,6 @@ function Background() {
         <img className='opacity-30 animate-[move2_120s_linear_infinite]' src={mangapages} alt="" />
       </div>
       <img className='w-100% absolute bottom-0' src={torii} alt="torii-gate" />
-    </div>
-  )
-}
-
-function QuizPage(props) {
-  // console.log(props.data[0]);
-  // const data = props.getData().then(results => console.log(results));
-  return (
-    <div className='w-full h-full bg-white flex flex-col overflow-y-auto'>
-      <MCQ question={props.data[0].question} answers={[props.data[0].correct_answer, ...props.data[0].incorrect_answers]} />
-      <MCQ question={props.data[1].question} answers={[props.data[1].correct_answer, ...props.data[1].incorrect_answers]} />
-      <MCQ question={props.data[2].question} answers={[props.data[2].correct_answer, ...props.data[2].incorrect_answers]} />
-      <MCQ question={props.data[3].question} answers={[props.data[3].correct_answer, ...props.data[3].incorrect_answers]} />
-    </div>
-  )
-}
-
-function MCQ(props) {
-  console.log(props.answers);
-  return (
-    <div className='w-full h-fit bg-white px-16 py-6 flex flex-col gap-3 border-b'>
-      <p className="font-['Architects_Daughter'] text-lg">{props.question}</p>
-      <div className='flex gap-x-3 flex-wrap'>
-        <button className='font-["Architects_Daughter"] bg-white w-fit px-2 py-0.5 border border-black whitespace-nowrap'>Dragon</button>
-        <button className='font-["Architects_Daughter"] bg-white w-fit px-2 py-0.5 border border-black whitespace-nowrap'>Kaido</button>
-        <button className='font-["Architects_Daughter"] bg-white w-fit px-2 py-0.5 border border-black whitespace-nowrap'>Garp</button>
-        <button className='font-["Architects_Daughter"] bg-white w-fit px-2 py-0.5 border border-black whitespace-nowrap'>Sengoku</button>
-      </div>
     </div>
   )
 }
