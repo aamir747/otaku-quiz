@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/otaku-quiz/static/css/main.cc97ecf7.css",
+    "main.js": "/otaku-quiz/static/js/main.7c759dc0.js",
+    "static/js/787.fa62f795.chunk.js": "/otaku-quiz/static/js/787.fa62f795.chunk.js",
+    "static/media/torii-gate.png": "/otaku-quiz/static/media/torii-gate.6bcc00a106d79926eb40.png",
+    "static/media/mangapages.png": "/otaku-quiz/static/media/mangapages.e47e0042388c74ac72d0.png",
+    "static/media/Fujimaru-Regular.ttf": "/otaku-quiz/static/media/Fujimaru-Regular.01fa3a372fa725adf71b.ttf",
+    "index.html": "/otaku-quiz/index.html",
+    "main.cc97ecf7.css.map": "/otaku-quiz/static/css/main.cc97ecf7.css.map",
+    "main.7c759dc0.js.map": "/otaku-quiz/static/js/main.7c759dc0.js.map",
+    "787.fa62f795.chunk.js.map": "/otaku-quiz/static/js/787.fa62f795.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cc97ecf7.css",
+    "static/js/main.7c759dc0.js"
+  ]
+}
