@@ -46,15 +46,15 @@ function App() {
 function LandingPage(props) {
 	return (
 		<div className='flex flex-col -mt-36'>
-			<div className='w-56 h-56 relative bg-red-700 rounded-full font-[fujimaru] flex flex-col justify-center items-center'>
+			<div className='w-56 h-56 relative bg-red-700 rounded-full font-fujimaru flex flex-col justify-center items-center'>
 				<p className='text-white text-base -mb-3'>オタククイズ</p>
 				<p className='text-black text-8xl -mb-2 drop-shadow-[4px_4px_0px_rgba(185,28,28,1)]'>otaku</p>
 				<p className='text-white text-5xl'>quiz</p>
 			</div>
-			<button onClick={props.handlePageChange} className='h-12 w-54 bg-black hover:text-red-700 hover:scale-105 transition duration-75 -mt-3 font-[fujimaru] text-3xl pb-2 z-10 text-white stroke-red-700 stroke-2'>start</button>
+			<button onClick={props.handlePageChange} className='h-12 w-54 bg-black hover:text-red-700 hover:scale-105 transition duration-75 -mt-3 font-fujimaru text-3xl pb-2 z-10 text-white stroke-red-700 stroke-2'>start</button>
 			<div className='flex justify-between mt-6'>
-				<p className='text-black font-[fujimaru] text-xl z-10'>Difficulty:</p>
-				<select className='bg-white form-select drop-shadow-xl inline-block font-[fujimaru] text-xl' value={props.diff} onChange={props.handleDiffChange}>
+				<p className='text-black font-fujimaru text-xl z-10'>Difficulty:</p>
+				<select className='bg-white form-select drop-shadow-xl inline-block font-fujimaru text-xl' value={props.diff} onChange={props.handleDiffChange}>
 					<option value="easy">Easy</option>
 					<option value="medium">Medium</option>
 					<option value="hard">Hard</option>
@@ -148,8 +148,8 @@ function QuizPage(props) {
 			}
 			{quizPageData.map((obj, index) => { return <MCQ question={props.data[index].question} answers={quizPageData[index]} correctAnswer={decodeEntity(props.data[index].correct_answer)} key={`${index}`} id={`${index}`} handleAnswer={handleAnswer} selectedOption={userAnswers[index].optionNum} quizEnded={quizEnded} /> })}
 			<div className='bg-white w-full h-20 absolute bottom-0 flex justify-evenly items-center  border-t border-black'>
-				<button id='back-button' onClick={props.handlePageChange} className='h-12 w-56 min-w-fit mx-2 bg-white hover:text-red-700 hover:scale-105 transition duration-75 font-[fujimaru] text-3xl pb-2 z-10 text-black stroke-red-700 stroke-2 border border-black'>{quizEnded ? 'Play Again' : 'Back'}</button>
-				<button onClick={showResults} disabled={!allQuesAnswered.current || quizEnded} className={`disabled:cursor-not-allowed disabled:bg-gray-300 h-12 w-56 min-w-fit mx-2 bg-black enabled:hover:text-red-700 enabled:hover:scale-105 transition duration-75 font-[fujimaru] text-3xl pb-2 z-10 text-white stroke-red-700 stroke-2 ${quizEnded ? 'hidden' : ''}`}>submit</button>
+				<button id='back-button' onClick={props.handlePageChange} className='h-12 w-56 min-w-fit mx-2 bg-white hover:text-red-700 hover:scale-105 transition duration-75 font-fujimaru text-3xl pb-2 z-10 text-black stroke-red-700 stroke-2 border border-black'>{quizEnded ? 'Play Again' : 'Back'}</button>
+				<button onClick={showResults} disabled={!allQuesAnswered.current || quizEnded} className={`disabled:cursor-not-allowed disabled:bg-gray-300 h-12 w-56 min-w-fit mx-2 bg-black enabled:hover:text-red-700 enabled:hover:scale-105 transition duration-75 font-fujimaru text-3xl pb-2 z-10 text-white stroke-red-700 stroke-2 ${quizEnded ? 'hidden' : ''}`}>submit</button>
 			</div>
 		</div>
 	)
