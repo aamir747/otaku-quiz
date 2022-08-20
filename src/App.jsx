@@ -1,6 +1,6 @@
 import torii from './assets/torii-gate.png'
 import mangapages from './assets/mangapages.png'
-import fujimaru from './assets/Fujimaru-Regular.ttf'
+import fujimaru from './assets/fujimaru-regular-webfont.woff2'
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import Confetti from 'react-confetti'
