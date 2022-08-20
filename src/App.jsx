@@ -1,10 +1,8 @@
-import logo from './logo.svg';
 import torii from './assets/torii-gate.png'
 import mangapages from './assets/mangapages.png'
 import fujimaru from './assets/Fujimaru-Regular.ttf'
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid'
 import Confetti from 'react-confetti'
 
 function App() {
