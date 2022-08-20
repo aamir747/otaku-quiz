@@ -41,3 +41,16 @@ code {
     }
   }
 }
+
+@font-face {
+  font-family: 'Fujimaru';
+  src: url('./assets/fonts/Fujimaru-Regular.eot');
+  src: url('./assets/fonts/Fujimaru-Regular.eot?#iefix') format('embedded-opentype'),
+    url('./assets/fonts/Fujimaru-Regular.woff2') format('woff2'),
+    url('./assets/fonts/Fujimaru-Regular.woff') format('woff'),
+    url('./assets/fonts/Fujimaru-Regular.ttf') format('truetype'),
+    url('./assets/fonts/Fujimaru-Regular.svg#Fujimaru-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
