@@ -5,6 +5,7 @@ import fujimaru from './assets/Fujimaru-Regular.ttf'
 import './App.css';
 import React, { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid'
+import Confetti from 'react-confetti'
 
 function App() {
 	//----------DIFFICULTY----------//
@@ -24,7 +25,8 @@ function App() {
 
 	//----------CURRENT_PAGE----------//
 	const [page, setPage] = useState('Landing');
-	function handlePageChange() {
+	function handlePageChange(event) {
+		if (event.target.id === 'back-button') { setData([]); getData() }
 		setPage(page === 'Landing' ? 'Quiz' : 'Landing');
 	}
 
@@ -34,7 +36,7 @@ function App() {
 
 	return (
 		<div className='flex justify-center items-center w-screen h-screen bg-white'>
-			<div className='w-[540px] h-[540px] bg-white flex flex-col justify-center items-center relative overflow-hidden border-2 border-black'>
+			<div className='w-[540px] h-[540px] bg-white flex flex-col justify-center items-center relative border-2 border-black overflow-hidden'>
 				{page === 'Landing' && <Background />}
 				{page === 'Landing' && <LandingPage diff={diff} handleDiffChange={handleDiffChange} handlePageChange={handlePageChange} />}
 				{page === 'Quiz' && <QuizPage data={data} handlePageChange={handlePageChange} />}
@@ -116,32 +118,54 @@ function QuizPage(props) {
 		})
 	}
 
+	const [quizEnded, setQuizEnded] = useState(false);
+
+	let score = React.useRef(0);
+	function showResults() {
+
+		const finalUserAnswers = userAnswers.map((obj) => {
+			return obj.selectedAnswer;
+		})
+		for (let i = 0; i < 10; i++) {
+			let actualAnswer = decodeEntity(props.data[i].correct_answer);
+			if (finalUserAnswers[i] === actualAnswer) {
+				score.current++;
+			}
+			console.log(`${finalUserAnswers[i]} ----- ${actualAnswer}`);
+		}
+		console.log(score);
+
+		document.getElementById('QBox').scrollTop = 0;
+		setQuizEnded(true);
+	}
+
 	return (
-		<div className='w-full h-full bg-white flex flex-col overflow-y-auto pb-20'>
-			{quizPageData.map((obj, index) => { return <MCQ question={props.data[index].question} answers={quizPageData[index]} key={`${index}`} id={`${index}`} handleAnswer={handleAnswer} selectedOption={userAnswers[index].optionNum} /> })}
+		<div id='QBox' className='w-full h-full bg-white flex flex-col overflow-y-auto mb-20 scrollbar'>
+			{quizEnded && score.current === 10 && <Confetti />}
+			{quizEnded &&
+				<div className='w-full h-fit bg-white p-4 flex flex-col gap-3 border-b items-center'>
+					<p className="font-[Kalam] text-md">Your score:</p>
+					<p className="font-[Kalam] text-4xl">{score.current}/10</p>
+				</div>
+			}
+			{quizPageData.map((obj, index) => { return <MCQ question={props.data[index].question} answers={quizPageData[index]} correctAnswer={decodeEntity(props.data[index].correct_answer)} key={`${index}`} id={`${index}`} handleAnswer={handleAnswer} selectedOption={userAnswers[index].optionNum} quizEnded={quizEnded} /> })}
 			<div className='bg-white w-full h-20 absolute bottom-0 flex justify-evenly items-center  border-t border-black'>
-				<button onClick={props.handlePageChange} className='h-12 w-56 bg-white hover:text-red-700 hover:scale-105 transition duration-75 font-[fujimaru] text-3xl pb-2 z-10 text-black stroke-red-700 stroke-2 border border-black'>back</button>
-				<button disabled={!allQuesAnswered.current} className='disabled:cursor-not-allowed disabled:bg-gray-400 h-12 w-56 bg-black enabled:hover:text-red-700 enabled:hover:scale-105 transition duration-75 font-[fujimaru] text-3xl pb-2 z-10 text-white stroke-red-700 stroke-2'>submit</button>
+				<button id='back-button' onClick={props.handlePageChange} className='h-12 w-56 min-w-fit mx-2 bg-white hover:text-red-700 hover:scale-105 transition duration-75 font-[fujimaru] text-3xl pb-2 z-10 text-black stroke-red-700 stroke-2 border border-black'>{quizEnded ? 'Play Again' : 'Back'}</button>
+				<button onClick={showResults} disabled={!allQuesAnswered.current || quizEnded} className={`disabled:cursor-not-allowed disabled:bg-gray-300 h-12 w-56 min-w-fit mx-2 bg-black enabled:hover:text-red-700 enabled:hover:scale-105 transition duration-75 font-[fujimaru] text-3xl pb-2 z-10 text-white stroke-red-700 stroke-2 ${quizEnded ? 'hidden' : ''}`}>submit</button>
 			</div>
 		</div>
 	)
 }
 
 function MCQ(props) {
-	function decodeEntity(inputStr) {
-		var textarea = document.createElement("textarea");
-		textarea.innerHTML = inputStr;
-		return textarea.value;
-	}
-
 	return (
-		<div className='w-full h-fit bg-white px-16 py-6 flex flex-col gap-3 border-b'>
-			<p className="font-[serif] text-lg">{decodeEntity(props.question)}</p>
+		<div className='w-full h-fit bg-white sm:px-16 px-4 py-6 flex flex-col gap-3 border-b'>
+			<p className="font-[Kalam] text-lg">{decodeEntity(props.question)}</p>
 			<div className='flex gap-3 flex-wrap'>
-				<button onClick={(event) => props.handleAnswer(event, parseInt(props.id), 0)} className={`font-[serif] w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 hover:text-red-700 transition duration-75 hover:drop-shadow-sm ${props.selectedOption === 0 ? 'bg-black text-white hover:text-white' : ''}`} value={decodeEntity(props.answers[0])}>{decodeEntity(props.answers[0])}</button>
-				<button onClick={(event) => props.handleAnswer(event, parseInt(props.id), 1)} className={`font-[serif] w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 hover:text-red-700 transition duration-75 hover:drop-shadow-sm ${props.selectedOption === 1 ? 'bg-black text-white hover:text-white' : ''}`} value={decodeEntity(props.answers[1])}>{decodeEntity(props.answers[1])}</button>
-				<button onClick={(event) => props.handleAnswer(event, parseInt(props.id), 2)} className={`font-[serif] w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 hover:text-red-700 transition duration-75 hover:drop-shadow-sm ${props.selectedOption === 2 ? 'bg-black text-white hover:text-white' : ''}`} value={decodeEntity(props.answers[2])}>{decodeEntity(props.answers[2])}</button>
-				<button onClick={(event) => props.handleAnswer(event, parseInt(props.id), 3)} className={`font-[serif] w-fit h-11 px-3 border border-gray-400 whitespace-nowrap  hover:scale-105 hover:text-red-700 transition duration-75 hover:drop-shadow-sm ${props.selectedOption === 3 ? 'bg-black text-white hover:text-white' : ''}`} value={decodeEntity(props.answers[3])}>{decodeEntity(props.answers[3])}</button>
+				<button disabled={props.quizEnded} onClick={(event) => props.handleAnswer(event, parseInt(props.id), 0)} className={`font-[Kalam] w-fit h-fit px-4 py-2 text-left border border-gray-400 enabled:hover:-translate-y-0.5 transition duration-200 ${props.selectedOption === 0 ? 'bg-black text-white' : ''} ${props.quizEnded && props.answers[0] === props.correctAnswer ? 'bg-green-200 text-black border-green-600' : ''} ${props.quizEnded && props.answers[0] !== props.correctAnswer && props.selectedOption === 0 ? 'bg-red-200 text-gray-600 border-none' : ''} `} value={decodeEntity(props.answers[0])}>{decodeEntity(props.answers[0])}</button>
+				<button disabled={props.quizEnded} onClick={(event) => props.handleAnswer(event, parseInt(props.id), 1)} className={`font-[Kalam] w-fit h-fit px-4 py-2 text-left border border-gray-400 enabled:hover:-translate-y-0.5 transition duration-200 ${props.selectedOption === 1 ? 'bg-black text-white' : ''} ${props.quizEnded && props.answers[1] === props.correctAnswer ? 'bg-green-200 text-black border-green-600' : ''} ${props.quizEnded && props.answers[1] !== props.correctAnswer && props.selectedOption === 1 ? 'bg-red-200 text-gray-600 border-none' : ''} `} value={decodeEntity(props.answers[1])}>{decodeEntity(props.answers[1])}</button>
+				<button disabled={props.quizEnded} onClick={(event) => props.handleAnswer(event, parseInt(props.id), 2)} className={`font-[Kalam] w-fit h-fit px-4 py-2 text-left border border-gray-400 enabled:hover:-translate-y-0.5 transition duration-200 ${props.selectedOption === 2 ? 'bg-black text-white' : ''} ${props.quizEnded && props.answers[2] === props.correctAnswer ? 'bg-green-200 text-black border-green-600' : ''} ${props.quizEnded && props.answers[2] !== props.correctAnswer && props.selectedOption === 2 ? 'bg-red-200 text-gray-600 border-none' : ''} `} value={decodeEntity(props.answers[2])}>{decodeEntity(props.answers[2])}</button>
+				<button disabled={props.quizEnded} onClick={(event) => props.handleAnswer(event, parseInt(props.id), 3)} className={`font-[Kalam] w-fit h-fit px-4 py-2 text-left border border-gray-400 enabled:hover:-translate-y-0.5 transition duration-200 ${props.selectedOption === 3 ? 'bg-black text-white' : ''} ${props.quizEnded && props.answers[3] === props.correctAnswer ? 'bg-green-200 text-black border-green-600' : ''} ${props.quizEnded && props.answers[3] !== props.correctAnswer && props.selectedOption === 3 ? 'bg-red-200 text-gray-600 border-none' : ''} `} value={decodeEntity(props.answers[3])}>{decodeEntity(props.answers[3])}</button>
 			</div>
 		</div>
 	)
@@ -149,7 +173,7 @@ function MCQ(props) {
 
 function Background() {
 	return (
-		<div className='w-[540px] h-100% flex flex-col justify-center items-center'>
+		<>
 			<div className='rotate-0 w-[540px] h-fit absolute drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] bg-white top-0 overflow-hidden'>
 				<img className='opacity-30 animate-[move_120s_linear_infinite]' src={mangapages} alt="" />
 			</div>
@@ -159,9 +183,17 @@ function Background() {
 			<div className='-rotate-12 w-[540px] h-fit absolute drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)] bg-white top-0 right-48 overflow-hidden'>
 				<img className='opacity-30 animate-[move2_120s_linear_infinite]' src={mangapages} alt="" />
 			</div>
-			<img className='w-[540px] absolute bottom-0' src={torii} alt="torii-gate" />
-		</div>
+			<img className='min-w-[540px] absolute bottom-0' src={torii} alt="torii-gate" />
+		</>
 	)
 }
 
+function decodeEntity(inputStr) {
+	var textarea = document.createElement("textarea");
+	textarea.innerHTML = inputStr;
+	return textarea.value;
+}
+
 export default App;
+
+// This was in Background Component: <div className='w-[540px] flex flex-col justify-center items-center'></div>

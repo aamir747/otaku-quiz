@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-  /* user-select: none; */
+  user-select: none;
 }
 
 body {
@@ -18,4 +18,26 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@layer utilities {
+  @media (any-pointer: fine) {
+    .scrollbar::-webkit-scrollbar {
+      width: 15px;
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+      background: #f0f0f0;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+      background: #000000;
+      border: 3px solid;
+      border-color: #f0f0f0;
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #B91C1C;
+    }
+  }
 }
